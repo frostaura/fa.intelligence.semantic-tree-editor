@@ -1,0 +1,17 @@
+version: "3"
+services:
+  # Launch http://localhost:8072/ to access the frontend after running `docker compose up`
+  frontend:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.Frontend
+    ports:
+      - 8072:4173
+  db:
+    image: postgres:11.0
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=sa
+      - POSTGRES_PASSWORD=Password1234
+      - POSTGRES_DB=Default

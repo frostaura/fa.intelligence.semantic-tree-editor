@@ -1,0 +1,269 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  /* CSS variables go here. */
+  --app-padding: 15px;
+  --app-background-color: rgb(0, 0, 0);
+  --app-background-secondary: rgb(30, 30, 30);
+  --app-color: rgb(255, 255, 255);
+  --app-color-blue: rgb(19, 145, 223);
+  --app-color-green: rgb(19, 223, 135);
+  --app-color-red: crimson;
+  --app-color-secondary: rgb(125, 125, 125);
+  --app-border-radius: 25px;
+  --app-transition: 0.25s;
+}
+
+/* Reset components for a standardized approach across browsers. */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--app-background-color);
+}
+
+/* Margins & Padding */
+.padding{
+  padding: var(--app-padding);
+}
+
+.padding-small{
+  padding: calc(var(--app-padding) / 2);
+}
+
+.padding-smaller{
+  padding: calc(var(--app-padding) / 3);
+}
+
+.padding-double{
+  padding: calc(var(--app-padding) * 2);
+}
+
+.padding-top{
+  padding-top: var(--app-padding);
+}
+
+.padding-half{
+  padding: calc(var(--app-padding) / 2);
+}
+
+.padding-top-half{
+  padding-top: calc(var(--app-padding) / 2);
+}
+
+.padding-top-double{
+  padding-top: calc(var(--app-padding) * 2);
+}
+
+.margin{
+  margin: var(--app-padding);
+}
+
+.margin-horizontal{
+  margin: 0 var(--app-padding);
+}
+
+.margin-half{
+  margin: calc(var(--app-padding) / 2);
+}
+
+.padding-right{
+  padding-right: var(--app-padding);
+}
+
+.margin-right{
+  margin-right: var(--app-padding);
+}
+
+.margin-bottom{
+  margin-bottom: var(--app-padding);
+}
+
+.margin-bottom-half{
+  margin-bottom: calc(var(--app-padding) / 2);
+}
+
+.margin-bottom-double{
+  margin-bottom: calc(var(--app-padding) * 2);
+}
+
+.margin-left{
+  margin-left: var(--app-padding);
+}
+
+.margin-right-half{
+  margin-right: calc(var(--app-padding) / 2);
+}
+
+.margin-left-half{
+  margin-left: calc(var(--app-padding) / 2);
+}
+
+/* Colors */
+.color-default{
+  background-color: var(--app-background-color);
+  color: var(--app-color);
+}
+
+.color-blue{
+  color: var(--app-color-blue);
+}
+
+.color-green{
+  color: var(--app-color-green);
+}
+
+.color-red{
+  color: var(--app-color-red);
+}
+
+.color-secondary{
+  color: var(--app-color-secondary);
+}
+
+.background-color{
+  background-color: var(--app-background-color);
+}
+
+.background-color-secondary{
+  background-color: var(--app-background-secondary);
+}
+
+.border-radius{
+  border-radius: var(--app-border-radius);
+}
+
+.border-radius-small{
+  border-radius: calc(var(--app-border-radius) / 2);
+}
+
+/* Sizing & Display */
+.bold{
+  font-weight: bold;
+}
+
+.flex{
+  display: flex;
+}
+
+.flex-center{
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-center-vertical{
+  justify-content: center;
+}
+
+.flex-center-horizontal{
+  align-items: center;
+}
+
+.flex-spacer{
+  flex: 1
+}
+
+.flex-direction-column{
+  flex-direction: column;
+}
+
+.flex-direction-row{
+  flex-direction: row;
+}
+
+.size-full{
+  width: 100%;
+  min-height: 100%;
+}
+
+.size-full-width{
+  width: 100%;
+}
+
+.center-with-margin{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.center-text{
+  text-align: center;
+}
+
+.end-text{
+  text-align: end;
+}
+
+.pointer{
+  cursor: pointer;
+  user-select: none;
+}
+
+.larger{
+  font-size: larger;
+}
+
+.smaller{
+  font-size: smaller;
+}
+
+.smallest{
+  font-size: x-small;
+}
+
+.no-select{
+  user-select: none;
+}
+
+.spin{
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.rounded-button{
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  min-height: 50px;
+  border-radius: 100%;
+  color: var(--app-color);
+  background-color: var(--app-background-secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.rounded{
+  border-radius: var(--app-border-radius);
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Custom selection colors */
+::selection {
+  background: rgba(147, 51, 234, 0.3); /* Purple with opacity */
+  color: inherit;
+}
+
+::-moz-selection {
+  background: rgba(147, 51, 234, 0.3);
+  color: inherit;
+}
+
+.selectable-content {
+  user-select: text;
+}
