@@ -1,8 +1,7 @@
 import { useContext } from "react";
 import { UserContext } from "../../App";
-import { FaList } from "react-icons/fa6";
+import { FaList, FaPlus } from "react-icons/fa6";
 import { FaAngleLeft } from "react-icons/fa6";
-import { FaPlus } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "../../enums/Routes";
 import { MagicAnimationContainer } from "./MagicAnimationContainer";
@@ -20,14 +19,19 @@ export function GlobalAppHeaderContainer(props: {
         <div className="flex size-full-width margin-bottom-double">
             <div className="rounded-button">
                 <MagicAnimationContainer mode={MagicAnimationContainerModes.AlwaysOn}>
+                    {props.action === GlobalAppHeaderContainerAction.NewProject &&
+                        <div className="rounded-button larger pointer" onClick={() => navigate(Routes.DirectorySelector)} title="New Project">
+                            <FaPlus />
+                        </div>
+                    }
                     {props.action === GlobalAppHeaderContainerAction.AllProjects &&
-                        <div className="rounded-button larger pointer" onClick={() => navigate(Routes.ProjectsView)} title="Go To All Projects">
+                        <div className="rounded-button larger pointer" onClick={() => navigate(Routes.AllProjects)} title="All Projects">
                             <FaList />
                         </div>
                     }
-                    {props.action === GlobalAppHeaderContainerAction.NewProject &&
-                        <div className="rounded-button larger pointer" onClick={() => navigate(Routes.NewProjectView)} title="Create a New Project">
-                            <FaPlus />
+                    {props.action === GlobalAppHeaderContainerAction.EditProject &&
+                        <div className="rounded-button larger pointer" onClick={() => navigate(Routes.Editor)} title="Project Editor">
+                            <FaList />
                         </div>
                     }
                     {props.action === GlobalAppHeaderContainerAction.Back &&

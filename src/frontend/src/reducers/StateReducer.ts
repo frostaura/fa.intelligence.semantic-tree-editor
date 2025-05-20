@@ -18,12 +18,6 @@ export const StateReducer = (state: IState, action: IStateReducerAction): IState
                 ...state,
                 ...action.value
             };
-        // Add a new project to the list of projects in the global store.
-        case StateReducerActionType.AddNewProject:
-            return {
-                ...state,
-                projects: [...state.projects, action.value]
-            };
         // Simply set the state to a copy of it's current self which should trigger a re-render without changing the underlying state.
         case StateReducerActionType.Refresh:
         default:

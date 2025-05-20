@@ -7,13 +7,11 @@ import { IState } from "./interfaces/state/IState";
 import { StateReducer } from "./reducers/StateReducer";
 import { IStateReducerAction } from "./interfaces/state/IStateReducerAction";
 import { StateReducerActionType } from "./enums/StateReducerActionTypes";
-import { NewProjectView } from "./components/views/NewProjectView";
+import { DirectorySelectorView } from "./components/views/DirectorySelectorView";
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { Routes as NavigationRoutes } from "./enums/Routes";
+import { EditorView } from "./components/views/EditorView";
 import { AllProjectsView } from "./components/views/AllProjectsView";
-import { ProjectDetailsView } from "./components/views/ProjectDetailsView";
-import { PlaygroundView } from "./components/views/PlaygroundView";
-import { LifecycleView } from "./components/views/LifecycleView";
 
 const StyledContainer = styled.div`
   height: 100vh;
@@ -44,12 +42,10 @@ function App(){
       <StyledContainer>
         <Router>
           <Routes>
-            <Route path="/" element={<NewProjectView />} />
-            <Route path={NavigationRoutes.NewProjectView} element={<NewProjectView />} />
-            <Route path={NavigationRoutes.ProjectsView} element={<AllProjectsView />} />
-            <Route path={NavigationRoutes.ProjectDetailsView} element={<ProjectDetailsView />} />
-            <Route path={NavigationRoutes.PlaygroundView} element={<PlaygroundView />} />
-            <Route path={NavigationRoutes.LifecycleView} element={<LifecycleView />} />
+            <Route path="/" element={<DirectorySelectorView />} />
+            <Route path={NavigationRoutes.DirectorySelector} element={<DirectorySelectorView />} />
+            <Route path={NavigationRoutes.AllProjects} element={<AllProjectsView />} />
+            <Route path={NavigationRoutes.Editor} element={<EditorView />} />
           </Routes>
         </Router>
       </StyledContainer>

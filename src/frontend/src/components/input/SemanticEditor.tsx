@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useContext, useEffect, useRef, useState } from "react";
 import { DiffEditor, Editor, Monaco } from "@monaco-editor/react";
 import { editor } from "monaco-editor";
+
 import { ISemanticEditorConfig } from "../../interfaces/state/ISemanticEditorConfig";
 import { Languages } from "../../enums/semantic/Languages";
 import { ModelTypes } from "../../enums/chat/ModelTypes";
@@ -217,19 +218,19 @@ export function SemanticEditor(props: {
 
         const prompt = props.context
             .replace("{CONTEXT}", value)
-            .replace("{QUESTIONS_COUNT}", `${state.semanticEditor.suggestionsCount}`)
-            .replace("{PDLC}", JSON.stringify(state.productDevelopmentLifecycle));
+            .replace("{QUESTIONS_COUNT}", `${state.semanticEditor.suggestionsCount}`);
         const response = await askAsync(ModelTypes.Mini, prompt, state);
 
         try {
             const parsedSuggestions = JSON.parse(response);
             setSuggestions(parsedSuggestions);
-          } catch (error) {
+        } catch (error) {
             console.error("Failed to parse JSON response:", response);
             // Optionally, handle the error by setting suggestions to an empty array or a fallback value
             setSuggestions([]);
-          }
-          setSuggestionsLoading(false);
+        }
+
+        setSuggestionsLoading(false);
     }, [value, state.llmConfig]);
 
     return (
@@ -266,8 +267,7 @@ export function SemanticEditor(props: {
                                             const prompt = projectIdeaRefiningAnswer
                                                 .replace("{CONTEXT}", value)
                                                 .replace("{SUGGESTED_QUESTION}", suggestion.question)
-                                                .replace("{ANSWER}", text)
-                                                .replace("{PDLC}", JSON.stringify(state.productDevelopmentLifecycle));
+                                                .replace("{ANSWER}", text);
                                             const response = await askAsync(ModelTypes.Mini, prompt, state);
 
                                             setValue(response);
@@ -320,8 +320,7 @@ export function SemanticEditor(props: {
                     const prompt = projectIdeaRefining
                         .replace("{CONTEXT}", value)
                         .replace("{REQUESTED_CHANGES}", text)
-                        .replace("{SELECTED_TEXT}", selectedText ?? "")
-                        .replace("{PDLC}", JSON.stringify(state.productDevelopmentLifecycle));
+                        .replace("{SELECTED_TEXT}", selectedText ?? "");
                     const response = await askAsync(ModelTypes.Mini, prompt, state);
 
                     setValue(response);

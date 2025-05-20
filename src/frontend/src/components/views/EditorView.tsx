@@ -21,7 +21,7 @@ const StyledContainer = styled.div`
     }
 `;
 
-export function AllProjectsView() {
+export function EditorView() {
     const [state, reducer] = useContext(UserContext);
     const navigate = useNavigate();
     const [examples, setExamples] = useState<Array<any>>([]);

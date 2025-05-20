@@ -70,6 +70,7 @@ export function ChatInput(props: {
     autoFocus?: boolean,
     placeholder?: string,
     hideFileUpload?: boolean,
+    allowDirectoryUploading?: boolean,
     usePrimaryStyling?: boolean
 }){
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -120,21 +121,42 @@ export function ChatInput(props: {
                                 autoFocus={props.autoFocus ?? false}/>
                         </div>
                         {showFileUpload &&
-                            <div className="rounded-button background-color-secondary pointer larger margin-left-half" title="Upload Text File">
+                            <div className="rounded-button background-color-secondary pointer larger margin-left-half" title={props.allowDirectoryUploading ? "Select a Directory" : "Select a File"}>
                                 {isProcessing && <FaSpinner className="spin" />}
                                 {!isProcessing && <FaPlus onClick={() => {
                                     setIsFocused(true);
                                     handleFileUploadClick();
                                 }} />}
-                                <input
-                                    type="file"
-                                    ref={fileInputRef}
-                                    onChange={(e) => {
-                                        OnFileChanged(e, setInputText, resetInput, setIsProcessing, props.onChange);
-                                        setIsFocused(false);
-                                    }}
-                                    className="hidden-file-input"
-                                />
+                                { props.allowDirectoryUploading &&
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        onClick={() => setIsProcessing(true)}
+                                        onChange={(e) => {
+                                            setIsProcessing(true);
+                                            OnFileChanged(e, setInputText, resetInput, setIsProcessing, props.onChange);
+                                            setIsFocused(false);
+                                            setIsProcessing(false);
+                                        }}
+                                        className="hidden-file-input"
+                                        multiple
+                                        {...({ webkitdirectory: "true", directory: "true" } as any)}
+                                    />
+                                }
+                                { !props.allowDirectoryUploading &&
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        onClick={() => setIsProcessing(true)}
+                                        onChange={(e) => {
+                                            setIsProcessing(true);
+                                            OnFileChanged(e, setInputText, resetInput, setIsProcessing, props.onChange);
+                                            setIsFocused(false);
+                                            setIsProcessing(false);
+                                        }}
+                                        className="hidden-file-input"
+                                    />
+                                }
                             </div>
                         }
                     </div>
