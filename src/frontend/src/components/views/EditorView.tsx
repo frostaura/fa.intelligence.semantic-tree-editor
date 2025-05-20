@@ -7,6 +7,8 @@ import { askAsync } from "../../services/data/LLMData";
 import { ModelTypes } from "../../enums/chat/ModelTypes";
 import { useEffectAsync } from "@/hooks/useAsyncEffect";
 import { GlobalAppHeaderContainerAction } from "@/enums/components/containers/GlobalAppHeaderContainerAction";
+import { Key } from "antd/es/table/interface";
+import { DataNode } from "antd/es/tree";
 
 const StyledContainer = styled.div`
     & .min-width{
@@ -21,10 +23,47 @@ const StyledContainer = styled.div`
     }
 `;
 
-export function EditorView() {
+export function EditorView(props: {
+    projectId?: string
+}) {
     const [state, reducer] = useContext(UserContext);
     const navigate = useNavigate();
     const [examples, setExamples] = useState<Array<any>>([]);
+        const [expandedKeys, setExpandedKeys] = useState<Array<Key>>([]);
+        const data: Array<DataNode> = [
+            {
+                key: "node_1",
+                title: <span>Node 1</span>,
+                children: [
+                    {
+                        key: "node_1.1",
+                        title: <span>Node 1.1</span>
+                    },
+                    {
+                        key: "node_1.2",
+                        title: <span>Node 1.2</span>
+                    }
+                ]
+            },
+            {
+                key: "node_2",
+                title: <span>Node 2</span>
+            },
+            {
+                key: "node_3",
+                title: <span>Node 3</span>,
+                children: [
+                    {
+                        key: "node_3.1",
+                        title: <span>Node 3.1</span>
+                    },
+                    {
+                        key: "node_3.2",
+                        title: <span>Node 3.2</span>
+                    }
+                ]
+            },
+        ];
 
     useEffectAsync(async () => {
         if(!state.llmConfig) return;
@@ -39,6 +78,12 @@ export function EditorView() {
         <StyledContainer className="size-full padding-double color-default flex flex-direction-column flex-center">
             <GlobalAppHeaderContainer action={GlobalAppHeaderContainerAction.NewProject}/>
             <div>Editor here...</div>
+            {/* <Tree
+                onExpand={(e) => setExpandedKeys(e)}
+                expandedKeys={expandedKeys}
+                autoExpandParent
+                treeData={data}
+            /> */}
         </StyledContainer>
     );
 }

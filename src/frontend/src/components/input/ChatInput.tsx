@@ -3,7 +3,14 @@ import { FaPlus, FaSpinner } from "react-icons/fa6";
 import { useRef, useState } from "react";
 import { MagicAnimationContainer } from "../containers/MagicAnimationContainer";
 import { MagicAnimationContainerModes } from "../../enums/components/containers/MagicAnimationContainerModes";
+import { IFile } from "@/interfaces/models/IFile";
 
+const DIRECTORIES_TO_IGNORE = [
+    "node_modules",
+    "bin",
+    "obj",
+    ".vs"
+];
 const StyledContainer = styled.div`
     & .glow-container,
     & .rounded-input,
@@ -41,7 +48,7 @@ const StyledContainer = styled.div`
     }
 `;
 
-export function OnFileChanged(event: React.ChangeEvent<HTMLInputElement>, setInputText: React.Dispatch<React.SetStateAction<string>>, resetInput: () => void, setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>, onChange?: (text: string, resetInput: () => void) => void){
+export function OnFileChanged(event: React.ChangeEvent<HTMLInputElement>, setInputText: React.Dispatch<React.SetStateAction<string>>, resetInput: () => void, setIsProcessing: React.Dispatch<React.SetStateAction<boolean>>, onChange?: (text: string, files: Array<IFile>, resetInput: () => void) => void){
     const file = event.target.files?.[0];
 
     if(!file) return;
@@ -50,14 +57,14 @@ export function OnFileChanged(event: React.ChangeEvent<HTMLInputElement>, setInp
     ReadFileContent(file, setInputText, resetInput, onChange);
 };
 
-const ReadFileContent = (file: File, setInputText: React.Dispatch<React.SetStateAction<string>>, resetInput: () => void, onChange?: (text: string, resetInput: () => void) => void) => {
+const ReadFileContent = (file: File, setInputText: React.Dispatch<React.SetStateAction<string>>, resetInput: () => void, onChange?: (text: string, files: Array<IFile>, resetInput: () => void) => void) => {
     const reader = new FileReader();
 
     reader.onload = (event) => {
         const content = event.target?.result as string;
 
         setInputText(content);
-        onChange?.(content, resetInput);
+        onChange?.(content, [], resetInput);
     };
     reader.onerror = (error) => {
         console.error("Error reading file:", error);
@@ -66,7 +73,7 @@ const ReadFileContent = (file: File, setInputText: React.Dispatch<React.SetState
 };
 
 export function ChatInput(props: {
-    onChange?: (text: string, resetInput: () => void) => void;
+    onChange?: (text: string, files: Array<IFile>, resetInput: () => void) => void;
     autoFocus?: boolean,
     placeholder?: string,
     hideFileUpload?: boolean,
@@ -88,7 +95,8 @@ export function ChatInput(props: {
     };
     const showFileUpload = props.hideFileUpload !== true;
     const usePrimaryStyling = props.usePrimaryStyling === true;
-    
+    const [files, setFiles] = useState<Array<IFile>>([]);
+
     return (
         <div className="size-full-width">
             <MagicAnimationContainer mode={MagicAnimationContainerModes.OnValueTrue} value={isFocused}>
@@ -115,7 +123,7 @@ export function ChatInput(props: {
                                 onKeyDown={(e) => {
                                     if(e.key === "Enter"){
                                         setIsProcessing(true);
-                                        props.onChange?.(inputText, resetInput);
+                                        props.onChange?.(inputText, files, resetInput);
                                     }
                                 }}
                                 autoFocus={props.autoFocus ?? false}/>
@@ -134,9 +142,35 @@ export function ChatInput(props: {
                                         onClick={() => setIsProcessing(true)}
                                         onChange={(e) => {
                                             setIsProcessing(true);
-                                            OnFileChanged(e, setInputText, resetInput, setIsProcessing, props.onChange);
-                                            setIsFocused(false);
-                                            setIsProcessing(false);
+
+                                            const files = Array.from(e.target.files || []);
+                                            const fileReadTasks = files
+                                                .filter((f: File) => !DIRECTORIES_TO_IGNORE.some(dir => f.webkitRelativePath.includes(dir)))
+                                                .map((f: File) =>
+                                                    new Promise<{ path: string, content: string }>((resolve, reject) => {
+                                                        const reader = new FileReader();
+
+                                                        reader.onload = () => {
+                                                            resolve({
+                                                                path: (f as any).webkitRelativePath || f.name,
+                                                                content: reader.result as string,
+                                                            });
+                                                        };
+                                                        reader.onerror = () => {
+                                                            reject(reader.error);
+                                                        };
+                                                        reader.readAsText(f);
+                                                    })
+                                                );
+
+                                            Promise.all(fileReadTasks)
+                                                .then((filesContents: Array<IFile>) => {
+                                                    setFiles(filesContents);
+                                                })
+                                                .catch((error) => {
+                                                    console.error("Error reading files", error);
+                                                })
+                                                .finally(() => setIsProcessing(false));
                                         }}
                                         className="hidden-file-input"
                                         multiple

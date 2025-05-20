@@ -29,11 +29,6 @@ export function GlobalAppHeaderContainer(props: {
                             <FaList />
                         </div>
                     }
-                    {props.action === GlobalAppHeaderContainerAction.EditProject &&
-                        <div className="rounded-button larger pointer" onClick={() => navigate(Routes.Editor)} title="Project Editor">
-                            <FaList />
-                        </div>
-                    }
                     {props.action === GlobalAppHeaderContainerAction.Back &&
                         <div className="rounded-button larger pointer" onClick={() => history.back()} title="Go Back">
                             <FaAngleLeft />

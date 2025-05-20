@@ -3,5 +3,6 @@
  */
 export enum StateReducerActionType{
     Refresh,
-    SetInitialState
+    SetInitialState,
+    LoadProjectFromDirectory
 }

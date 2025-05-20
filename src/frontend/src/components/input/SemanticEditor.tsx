@@ -263,7 +263,7 @@ export function SemanticEditor(props: {
                                         hideFileUpload={true}
                                         usePrimaryStyling={true}
                                         placeholder="Answer the question"
-                                        onChange={async (text, resetInput) => {
+                                        onChange={async (text, files, resetInput) => {
                                             const prompt = projectIdeaRefiningAnswer
                                                 .replace("{CONTEXT}", value)
                                                 .replace("{SUGGESTED_QUESTION}", suggestion.question)
@@ -316,7 +316,7 @@ export function SemanticEditor(props: {
                         ? `Suggest changes on selection (${selectedText?.split(" ").length} words)`
                         : "Suggest changes on the entire text"
                 }
-                onChange={async (text, resetInput) => {
+                onChange={async (text, files, resetInput) => {
                     const prompt = projectIdeaRefining
                         .replace("{CONTEXT}", value)
                         .replace("{REQUESTED_CHANGES}", text)

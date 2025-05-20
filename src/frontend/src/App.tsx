@@ -8,7 +8,7 @@ import { StateReducer } from "./reducers/StateReducer";
 import { IStateReducerAction } from "./interfaces/state/IStateReducerAction";
 import { StateReducerActionType } from "./enums/StateReducerActionTypes";
 import { DirectorySelectorView } from "./components/views/DirectorySelectorView";
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useParams } from 'react-router-dom';
 import { Routes as NavigationRoutes } from "./enums/Routes";
 import { EditorView } from "./components/views/EditorView";
 import { AllProjectsView } from "./components/views/AllProjectsView";
@@ -24,7 +24,8 @@ export const UserContext = React.createContext<[IState, React.Dispatch<IStateRed
 
 function App(){
   const stateReducer = useReducer(StateReducer, InitialState);
-  const [state, reducer] = stateReducer;
+  const [_state, reducer] = stateReducer;
+  const { projectId } = useParams();
 
   // System-level hooks get registered here.
   useEffect(() => {
@@ -45,7 +46,7 @@ function App(){
             <Route path="/" element={<DirectorySelectorView />} />
             <Route path={NavigationRoutes.DirectorySelector} element={<DirectorySelectorView />} />
             <Route path={NavigationRoutes.AllProjects} element={<AllProjectsView />} />
-            <Route path={NavigationRoutes.Editor} element={<EditorView />} />
+            <Route path={NavigationRoutes.EditProject} element={<EditorView projectId={projectId} />} />
           </Routes>
         </Router>
       </StyledContainer>

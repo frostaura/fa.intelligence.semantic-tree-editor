@@ -13,6 +13,7 @@ export const InitialState: IState = {
         firstName: "Dean",
         lastName: "Martin"
     },
+    projects: [],
     semanticEditor: {
         options: {
             tabSize: 4,

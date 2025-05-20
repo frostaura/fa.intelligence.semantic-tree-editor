@@ -1,4 +1,5 @@
 import { Views } from "../../enums/Views";
+import { IProject } from "../models/IProject";
 import { ILLMConfig } from "./ILLMConfig";
 import { ISemanticEditorConfig } from "./ISemanticEditorConfig";
 import { IUser } from "./IUser";
@@ -11,6 +12,8 @@ export interface IState{
     activeView: Views,
     // Contextual details about the operator of the system. - Currently-signed-in user.
     activeUser?: IUser,
+    // A collection of all projects.
+    projects?: Array<IProject>,
     // Configuration for comms with the LLM.
     llmConfig?: ILLMConfig,
     // Configuration for the semantic editor component.
