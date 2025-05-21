@@ -1,16 +1,9 @@
 import styled from "styled-components";
 import { GlobalAppHeaderContainer } from "../containers/GlobalAppHeaderContainer";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { UserContext } from "../../App";
 import { useNavigate } from "react-router-dom";
-import { askAsync } from "../../services/data/LLMData";
-import { ModelTypes } from "../../enums/chat/ModelTypes";
-import { useEffectAsync } from "@/hooks/useAsyncEffect";
 import { GlobalAppHeaderContainerAction } from "@/enums/components/containers/GlobalAppHeaderContainerAction";
-import { Tree } from 'antd';
-import { DataNode } from "antd/es/tree";
-import { Key } from "antd/es/table/interface";
-import Search from "antd/es/input/Search";
 import { ChatInput } from "../input/ChatInput";
 import { StateReducerActionType } from "@/enums/StateReducerActionTypes";
 import { Routes } from "@/enums/Routes";
@@ -39,19 +32,22 @@ export function DirectorySelectorView() {
             <div className="size-full-width flex flex-spacer flex-center">
                 <ChatInput
                     autoFocus={true}
-                    placeholder="Describe a new project and select a directory."
+                    placeholder="Describe a new project or select a directory."
                     allowDirectoryUploading={true}
                     onChange={(description, files, resetInput) => {
-                        debugger;
                         reducer?.({
                             type: StateReducerActionType.LoadProjectFromDirectory,
                             value: {
                                 description: description,
                                 files: files,
-                                callback: (project: IProject) => navigate(Routes.EditProject.replace(":projectId", project.id || ""))
+                                callback: (project: IProject) => {
+                                    const navigationTarget = Routes.EditProject.replace(":projectId", project.id || "-1");
+
+                                    resetInput();
+                                    navigate(navigationTarget);
+                                }
                             }
                         });
-                        resetInput();
                     }}
                 ></ChatInput>
             </div>

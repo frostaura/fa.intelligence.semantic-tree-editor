@@ -9,7 +9,7 @@ import { ModelTypes } from "../../enums/chat/ModelTypes";
 import { IState } from "../../interfaces/state/IState";
 import { UserContext } from "../../App";
 import { ChatInput } from "./ChatInput";
-import { askAsync } from "@/services/data/LLMData";
+import { AskAsync } from "@/services/data/LLMData";
 import { IFollowUpQuestion } from "@/interfaces/prompt_signatures/IFollowUpQuestion";
 import { FaSpinner } from "react-icons/fa6";
 import { projectIdeaRefining } from "@/prompts/edit.project_idea_refining";
@@ -219,7 +219,7 @@ export function SemanticEditor(props: {
         const prompt = props.context
             .replace("{CONTEXT}", value)
             .replace("{QUESTIONS_COUNT}", `${state.semanticEditor.suggestionsCount}`);
-        const response = await askAsync(ModelTypes.Mini, prompt, state);
+        const response = await AskAsync(ModelTypes.Mini, prompt, state);
 
         try {
             const parsedSuggestions = JSON.parse(response);
@@ -268,7 +268,7 @@ export function SemanticEditor(props: {
                                                 .replace("{CONTEXT}", value)
                                                 .replace("{SUGGESTED_QUESTION}", suggestion.question)
                                                 .replace("{ANSWER}", text);
-                                            const response = await askAsync(ModelTypes.Mini, prompt, state);
+                                            const response = await AskAsync(ModelTypes.Mini, prompt, state);
 
                                             setValue(response);
                                             props.onChange?.(response);
@@ -321,7 +321,7 @@ export function SemanticEditor(props: {
                         .replace("{CONTEXT}", value)
                         .replace("{REQUESTED_CHANGES}", text)
                         .replace("{SELECTED_TEXT}", selectedText ?? "");
-                    const response = await askAsync(ModelTypes.Mini, prompt, state);
+                    const response = await AskAsync(ModelTypes.Mini, prompt, state);
 
                     setValue(response);
                     props.onChange?.(response);

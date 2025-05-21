@@ -3,7 +3,7 @@ import { GlobalAppHeaderContainer } from "../containers/GlobalAppHeaderContainer
 import { useContext, useState } from "react";
 import { UserContext } from "../../App";
 import { useNavigate } from "react-router-dom";
-import { askAsync } from "../../services/data/LLMData";
+import { AskAsync } from "../../services/data/LLMData";
 import { ModelTypes } from "../../enums/chat/ModelTypes";
 import { useEffectAsync } from "@/hooks/useAsyncEffect";
 import { GlobalAppHeaderContainerAction } from "@/enums/components/containers/GlobalAppHeaderContainerAction";

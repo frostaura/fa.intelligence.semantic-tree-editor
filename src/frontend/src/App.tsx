@@ -12,6 +12,7 @@ import { HashRouter as Router, Routes, Route, useParams } from 'react-router-dom
 import { Routes as NavigationRoutes } from "./enums/Routes";
 import { EditorView } from "./components/views/EditorView";
 import { AllProjectsView } from "./components/views/AllProjectsView";
+import { useAppSettings } from "./hooks/useAppSettings";
 
 const StyledContainer = styled.div`
   height: 100vh;
@@ -27,16 +28,7 @@ function App(){
   const [_state, reducer] = stateReducer;
   const { projectId } = useParams();
 
-  // System-level hooks get registered here.
-  useEffect(() => {
-    fetch('/appsettings.json')
-      .then(response => response.json())
-      .then(data => reducer({
-        type: StateReducerActionType.SetInitialState,
-        value: data
-      }))
-      .catch(error => console.error('Error loading appsettings.json:', error));
-  }, []);
+  useAppSettings(reducer);
 
   return (
     <UserContext.Provider value={stateReducer}>

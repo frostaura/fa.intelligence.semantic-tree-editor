@@ -110,6 +110,7 @@ export function ChatInput(props: {
                                 {!showFileUpload && isProcessing && <FaSpinner className="spin" />}
                             </div>
                             <input
+                                id="chat-input-text-input"
                                 type="text"
                                 placeholder={props.placeholder}
                                 className="flex-spacer"
@@ -143,8 +144,8 @@ export function ChatInput(props: {
                                         onChange={(e) => {
                                             setIsProcessing(true);
 
-                                            const files = Array.from(e.target.files || []);
-                                            const fileReadTasks = files
+                                            const parsedFiles = Array.from(e.target.files || []);
+                                            const fileReadTasks = parsedFiles
                                                 .filter((f: File) => !DIRECTORIES_TO_IGNORE.some(dir => f.webkitRelativePath.includes(dir)))
                                                 .map((f: File) =>
                                                     new Promise<{ path: string, content: string }>((resolve, reject) => {
@@ -166,6 +167,15 @@ export function ChatInput(props: {
                                             Promise.all(fileReadTasks)
                                                 .then((filesContents: Array<IFile>) => {
                                                     setFiles(filesContents);
+
+                                                    if(filesContents && filesContents.length > 0){
+                                                        const projectNameFromPath = filesContents[0]
+                                                            .path
+                                                            .split("/")[0]
+
+                                                        setIsProcessing(false);
+                                                        props.onChange?.(projectNameFromPath, filesContents, resetInput);
+                                                    }
                                                 })
                                                 .catch((error) => {
                                                     console.error("Error reading files", error);

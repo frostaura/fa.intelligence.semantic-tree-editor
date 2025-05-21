@@ -17,12 +17,11 @@ import { IParameter } from "@/interfaces/models/chat/IParameter";
  * @param state The global state of the application which includes the configuration required.
  * @returns The updated conversation collection that contains the latest LLM response in the last/latest item inside the collection.
  */
-export async function chatAsync(type: ModelTypes, conversation: Array<IMessage>, onProgress: (update: IProgressUpdate) => void, state: IState, functions: Array<IFunction> = []): Promise<Array<IMessage>> {
+export async function ChatAsync(type: ModelTypes, conversation: Array<IMessage>, onProgress: (update: IProgressUpdate) => void, state: IState, functions: Array<IFunction> = []): Promise<Array<IMessage>> {
     if(!state.llmConfig) throw new Error("chatAsync requires a valid LLM configuration to operate. This error could occur due to a call to this function prior to configuration being initialized.");
 
     console.debug(`[LLMData][chatAsync] Chatting with "${ModelTypes[type]}" with ${conversation.length} messages and ${functions.length} function(s) enabled.`);
 
-    // TODO: Wire this up to the API.
     const modelName = type === ModelTypes.Full ? state.llmConfig.fullModelName : state.llmConfig.miniModelName;
     const requestUrl = state.llmConfig.baseApiUrl.replace("{MODEL_NAME}", modelName);
     const availableFunctions = functions.map((func: IFunction) => {
@@ -88,7 +87,7 @@ export async function chatAsync(type: ModelTypes, conversation: Array<IMessage>,
             content: `${functionResultPrefix} ${JSON.stringify(funcResponse)}`
         });
 
-        const followUpResponse = await chatAsync(type, functionalConversationHistory, onProgress, state, functions);
+        const followUpResponse = await ChatAsync(type, functionalConversationHistory, onProgress, state, functions);
         const latestMessage = followUpResponse[followUpResponse.length - 1];
 
         return [...conversation, latestMessage];
@@ -119,10 +118,10 @@ export async function chatAsync(type: ModelTypes, conversation: Array<IMessage>,
  * @param functions The functions available to the LLM.
  * @returns The text response from the LLM.
  */
-export async function askAsync(type: ModelTypes, text: string, state: IState, functions: Array<IFunction> = []): Promise<string> {
+export async function AskAsync(type: ModelTypes, text: string, state: IState, functions: Array<IFunction> = []): Promise<string> {
     console.debug(`[LLMData][askAsync] Asking "${text}" with ${functions.length} function(s) enabled.`);
 
-    const response = await chatAsync(type, [
+    const response = await ChatAsync(type, [
         {
             role: Roles.User,
             content: [
